@@ -7,16 +7,24 @@ curl -o moviedata.csv  https://raw.githubusercontent.com/yinghaoz1/tmdb-movie-da
 
 
 
-
-
-
-
+#Câu 6 diễn viên nào đóng nhiều phim nhất
+csvcut -c  id,cast moviedata_new.csv > cau_6_data_2.csv # Lấy id, cast ra file mới
+## Xử lý dấu pipe
+awk -F',' '{
+n = split($2, cast, "|");
+for (i = 1; i <= n; i++) {
+gsub(/"/, "", cast[i]);
+printf "%s,%s\n", $1, cast[i];
+}
+}' cau_6_data_2.csv > cau_6_data_3.csv
+sed '1s/id,cast/id,name/' cau_6_data_3.csv > cau_6_data_4.csv # thay đổi tên cột cast thành name vì cast khi dùng csvsql sẽ bị lỗi
+csvsql --query "SELECT name,COUNT(id) as number_film FROM cau_6_data_4 GROUP BY name HAVING name is not null  ORDER BY COUNT(id) DESC LIMIT 1" cau_6_data_4.csv
 
 
 
 # Câu 7 Thống kê số lượng phim theo các thể loại.
 csvcut -c id,genres moviedata_new.csv > cau_7_data.csv
-
+## Xử lý dấu pipe
 awk -F',' '{
 n = split($2, genres, "|");
 for (i = 1; i <= n; i++) {
@@ -24,5 +32,5 @@ gsub(/"/, "", genres[i]);
 printf "%s,%s\n", $1, genres[i];
 }
 }' cau_7_data.csv > cau_7_1.csv
-
+## Kết quả câu 7
 csvsql --query "SELECT genres, COUNT(id) as number_film FROM cau_7_1 GROUP BY genres HAVING genres is not null ORDER BY COUNT(id) DESC" cau_7_1.csv > /home/thinh/project_1/cau_7.csv
