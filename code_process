@@ -3,6 +3,10 @@ curl -o moviedata.csv  https://raw.githubusercontent.com/yinghaoz1/tmdb-movie-da
 awk -F',' '{for (i=1; i<=NF; i++) if ($i == "") $i = "N/A"; print}' OFS=',' moviedata.csv > moviedata_new.csv #xử lý dữ liệu null
 mkdir /home/thinh/project_1 # tạo thư mục project
 
+#Câu 1 Sắp xếp các bộ phim theo ngày phát hành giảm dần rồi lưu ra một file mới
+csvsql --query "SELECT original_title,release_date FROM moviedata_new ORDER BY release_date DESC" moviedata_new.csv > /home/thinh/project_1/cau_1.csv
+
+
 #Câu 2 Lọc ra các bộ phim có đánh giá trung bình trên 7.5 rồi lưu ra một file mới
 
 csvsql --query "SELECT original_title,vote_average FROM moviedata_new WHERE vote_average >= 7.5 ORDER BY vote_average DESC" 
