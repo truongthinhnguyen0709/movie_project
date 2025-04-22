@@ -1,2 +1,28 @@
 # Tiền xử lý dữ liệu
 curl -o moviedata.csv  https://raw.githubusercontent.com/yinghaoz1/tmdb-movie-dataset-analysis/master/tmdb-movies.csv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Câu 7 Thống kê số lượng phim theo các thể loại.
+csvcut -c id,genres moviedata_new.csv > cau_7_data.csv
+
+awk -F',' '{
+n = split($2, genres, "|");
+for (i = 1; i <= n; i++) {
+gsub(/"/, "", genres[i]);
+printf "%s,%s\n", $1, genres[i];
+}
+}' cau_7_data.csv > cau_7_1.csv
+
+csvsql --query "SELECT genres, COUNT(id) as number_film FROM cau_7_1 GROUP BY genres HAVING genres is not null ORDER BY COUNT(id) DESC" cau_7_1.csv > /home/thinh/project_1/cau_7.csv
