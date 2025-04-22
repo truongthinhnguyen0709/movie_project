@@ -1,0 +1,2 @@
+# Tiền xử lý dữ liệu
+curl -o moviedata.csv  https://raw.githubusercontent.com/yinghaoz1/tmdb-movie-dataset-analysis/master/tmdb-movies.csv
